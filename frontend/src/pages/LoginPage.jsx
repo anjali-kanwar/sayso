@@ -1,18 +1,25 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import api from "../api.js";
 import { useAuth } from "../AuthContext.jsx";
 import Navbar from "../components/Navbar.jsx";
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { user, login } = useAuth();
   const navigate = useNavigate();
   const [mode, setMode] = useState("login");
   const [form, setForm] = useState({ name: "", username: "", password: "" });
   const [loading, setLoading] = useState(false);
 
+  if (user) return <Navigate to={user.role === "admin" ? "/admin" : "/dashboard"} replace />;
+
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const switchMode = (m) => {
+    setMode(m);
+    setForm({ name: "", username: "", password: "" });
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -44,16 +51,45 @@ export default function LoginPage() {
       <main className="flex-1 flex items-center justify-center bg-cream px-4">
         <div className="card w-full max-w-md">
           <div className="flex gap-2 mb-6 bg-cream-light p-1 rounded-md">
-            <button type="button" className={tab("login")} onClick={() => setMode("login")}>Login</button>
-            <button type="button" className={tab("signup")} onClick={() => setMode("signup")}>Sign Up</button>
+            <button type="button" className={tab("login")} onClick={() => switchMode("login")}>
+              Login
+            </button>
+            <button type="button" className={tab("signup")} onClick={() => switchMode("signup")}>
+              Sign Up
+            </button>
           </div>
 
           <form onSubmit={onSubmit} className="space-y-4">
             {mode === "signup" && (
-              <input className="input" name="name" placeholder="Name" value={form.name} onChange={onChange} required />
+              <input
+                className="input"
+                name="name"
+                placeholder="Enter name"
+                value={form.name}
+                onChange={onChange}
+                autoComplete="off"
+                required
+              />
             )}
-            <input className="input" name="username" placeholder="Username" value={form.username} onChange={onChange} required />
-            <input className="input" type="password" name="password" placeholder="Password" value={form.password} onChange={onChange} required />
+            <input
+              className="input"
+              name="username"
+              placeholder="Enter username"
+              value={form.username}
+              onChange={onChange}
+              autoComplete="off"
+              required
+            />
+            <input
+              className="input"
+              type="password"
+              name="password"
+              placeholder="Enter password"
+              value={form.password}
+              onChange={onChange}
+              autoComplete="new-password"
+              required
+            />
             <button className="btn-primary w-full" disabled={loading}>
               {loading ? "Please wait..." : mode === "login" ? "Login" : "Create Account"}
             </button>
