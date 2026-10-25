@@ -1,16 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,jsx}"],
   theme: {
     extend: {
       colors: {
-        plum: { DEFAULT: "#4F2339", light: "#6B3350" },
-        cream: { DEFAULT: "#F0D9C5", light: "#FAF3EC" },
+        plum: { DEFAULT: "#FFDEDE", light: "#FFC4C4" },
+        cream: { DEFAULT: "#0B0B0B", light: "#121212" },
+        charcoal: "#202020",
       },
     },
   },
   plugins: [],
-}
+};
